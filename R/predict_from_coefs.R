@@ -15,7 +15,8 @@
 #'
 #' @export
 predict_from_coefs <- function(dat, response, coefs){
-
+predict <- data.frame(matrix(dat%>%coefs))
+return(predict)
 
 
 
