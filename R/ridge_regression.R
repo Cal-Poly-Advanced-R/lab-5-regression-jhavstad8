@@ -24,7 +24,7 @@ ridge_regression <- function(dat, response, lambda) {
   ### This should be a data frame, with columns named
   ### "Intercept" and the same variable names as dat, and also a column
   ### called "lambda".
-  names(results) <- c("Intercept", names(dat), "lambda")
+  colnames(results) <- c("Intercept", names(dat), "lambda")
   return(results)
 
 }
@@ -53,6 +53,6 @@ find_best_lambda <- function(train_dat, test_dat, response, lambdas) {
   ### For each lambda, you should record the resulting Sum of Squared error
   ### (i.e., the predicted value minus the real value squared) from prediction
   ### on the test dataset.
-  names(lambda_errors) <- c("lambda", "error")
+  colnames(lambda_errors) <- c("lambda", "error")
   return(lambda_errors)
 }
