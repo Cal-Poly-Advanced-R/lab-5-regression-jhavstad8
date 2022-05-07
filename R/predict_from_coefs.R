@@ -15,9 +15,11 @@
 #'
 #' @export
 predict_from_coefs <- function(dat, response, coefs){
-predict <- data.frame(matrix(dat%>%coefs))
-return(predict)
-
-
-
+  dat2 <- dat %>% select(-{{response}})
+  dat3 <- as.matrix(dat2)
+  coefs2 <- coefs[-1]
+  coefs3 <- as.matrix(coefs2)
+  pred_response <- dat3 %*% t(coefs3) + coefs[1,1]
+  colnames(pred_response) <- c("Predicted Responses")
+  return(pred_response)
 }

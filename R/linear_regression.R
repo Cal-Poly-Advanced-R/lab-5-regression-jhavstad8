@@ -60,28 +60,26 @@ simple_linear_regression <- function(dat, response, explanatory, method = NULL){
 #' @return A data frame of coefficients
 #'
 #' @import dplyr
-#'@import matlib
-#'@export
+#' @export
 multiple_linear_regression <- function(dat, response, method = NULL) {
-  names<- names(dat)
-  vars <- c("Intercept", names)
   num_rows <- length(dat[,1])
   ones_col <- rep(1,num_rows)
   xmatr <- matrix(ones_col, ncol = 1)
-  for(i in 1:length(names)){
-    if(names[i] == response){
-      res_vec <- dat[i]
-      ymatr <- matrix(res_vec, ncol = 1)
-    } else{
-      expvec <- dat[i]
-      xmatr <- cbind(xmatr,expvec)
-    }
-  }
-  A <- inv((t(xmatr)*xmatr)) * t(xmatr) * ymatr
-  results <- data.frame(matrix(t(A),ncol=length(names)))### This should be a data frame, with columns named
+
+  y <- dat %>% pull({{response}})
+  ymatr <- matrix(y, ncol = 1)
+
+  dat2 <- dat %>% select(-{{response}})
+  xmatr2 <- cbind(xmatr,dat2)
+  xmatr3 <- as.matrix(xmatr2)
+  xdf <- data.frame(xmatr3)
+  names <- names(xdf[-1])
+  vars <- c("Intercept", names)
+  A <- solve(crossprod(xmatr3)) %*% t(xmatr3) %*% ymatr
+  results <- data.frame(matrix(A,nrow=1))
+  ### This should be a data frame, with columns named
                 ### "Intercept" and the same variable names as dat.
-  ## I don't know what I am doing
-  colnames(results) <- names
+  colnames(results) <- vars
 
   return(results)
 
